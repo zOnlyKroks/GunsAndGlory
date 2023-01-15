@@ -1,0 +1,4 @@
+accessWidener	v1	named
+
+accessible method net/minecraft/entity/Entity initDataTracker ()V
+accessible field net/minecraft/entity/projectile/FireworkRocketEntity life I

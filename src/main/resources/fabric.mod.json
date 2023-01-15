@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "guns-and-glory",
+	"version": "${version}",
+	"name": "Guns And Glory",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"zOnlyKroks!"
+	],
+	"license": "MIT",
+	"icon": "assets/guns-and-glory/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"de.zonlykroks.gunsandglory.GunsAndGlory"
+		],
+		"client": [
+			"de.zonlykroks.gunsandglory.client.GunsAndGloryClient"
+		],
+		"preLaunch": [
+			"de.zonlykroks.gunsandglory.GunsAndGloryPreLaunch"
+		],
+		"fabric-datagen": [
+			"de.zonlykroks.gunsandglory.GunsAndGloryDataGenerator"
+		]
+	},
+	"mixins": [
+		"guns-and-glory.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.12",
+		"minecraft": "~1.19.2",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	},
+	"accessWidener": "gunsandglory.accesswidener"
+}
