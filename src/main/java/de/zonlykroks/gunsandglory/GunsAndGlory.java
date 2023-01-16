@@ -5,7 +5,7 @@ import de.zonlykroks.gunsandglory.common.IBulletType;
 import de.zonlykroks.gunsandglory.config.GunsAndGloryConfig;
 import de.zonlykroks.gunsandglory.init.EntityInit;
 import de.zonlykroks.gunsandglory.init.ItemInit;
-import de.zonlykroks.gunsandglory.util.RegistryUtils;
+import de.zonlykroks.gunsandglory.util.RegistryManager;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.util.registry.Registry;
@@ -27,9 +27,7 @@ public class GunsAndGlory implements ModInitializer {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
-		Registry.register(RegistryUtils.BULLET_CALIBER_REGISTRY,IBulletCaliber.NATO556.id(), IBulletCaliber.NATO556);
-		Registry.register(RegistryUtils.BULLET_TYPE_REGISTRY, IBulletType.NORMAL.id(),IBulletType.NORMAL);
+		new RegistryManager();
 
 		new ItemInit();
 		new EntityInit();

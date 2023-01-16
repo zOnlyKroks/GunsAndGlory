@@ -10,8 +10,6 @@ import net.minecraft.util.math.Vec3d;
 
 public interface IBulletCaliber {
 
-    IBulletCaliber NATO556 = new Nato556();
-
     Identifier id();
     int applyEntityDamage(Entity hitEntity,BulletEntity bulletEntity, Vec3d initialPos, Vec3d endPos);
     float verticalDrag(BlockPos pos,Vec3d initialPos);

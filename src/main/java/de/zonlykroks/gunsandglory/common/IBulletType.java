@@ -5,8 +5,6 @@ import net.minecraft.util.Identifier;
 
 public interface IBulletType {
 
-    IBulletType NORMAL = new NormalType();
-
     Identifier id();
     int fireInSeconds();
     float explosionStrength();

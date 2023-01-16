@@ -1,5 +1,8 @@
 package de.zonlykroks.gunsandglory.common;
 
+import de.zonlykroks.gunsandglory.init.EntityInit;
+import de.zonlykroks.gunsandglory.util.RegistryManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -24,8 +27,8 @@ public class AbstractGunItem extends Item{
     }
 
     public void shoot(LivingEntity user, World world) {
-        BulletEntity entity = new BulletEntity(IBulletCaliber.NATO556.id(), IBulletType.NORMAL.id(),world,user);
-        entity.initEntity(user);
+        BulletEntity entity = new BulletEntity(EntityInit.BULLET,world);
+        entity.initEntity(RegistryManager.NATO556.id(),RegistryManager.NORMAL.id(),user);
         world.spawnEntity(entity);
     }
 }

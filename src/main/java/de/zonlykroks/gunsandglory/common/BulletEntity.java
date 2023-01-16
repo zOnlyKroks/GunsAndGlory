@@ -1,24 +1,15 @@
 package de.zonlykroks.gunsandglory.common;
 
 import de.zonlykroks.gunsandglory.init.EntityInit;
-import de.zonlykroks.gunsandglory.util.RegistryUtils;
+import de.zonlykroks.gunsandglory.util.RegistryManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.fabricmc.fabric.api.event.Event;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
@@ -27,28 +18,21 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class BulletEntity extends PersistentProjectileEntity implements IAnimatable{
+public class BulletEntity extends ProjectileEntity implements IAnimatable{
 
     private IBulletType type;
     private IBulletCaliber caliber;
-
-    private LivingEntity owner;
 
     private Vec3d initialPos = new Vec3d(0, 0, 0);
 
     protected int ticksInAir;
 
-    public BulletEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
+    public BulletEntity(EntityType<BulletEntity> entityType, World world) {
         super(entityType,world);
     }
 
-    protected BulletEntity(Identifier caliber, Identifier bulletType, World world, LivingEntity owner) {
-        super(EntityInit.BULLET,world);
-        this.type = RegistryUtils.BULLET_TYPE_REGISTRY.get(caliber);
-        this.caliber = RegistryUtils.BULLET_CALIBER_REGISTRY.get(bulletType);
-        this.owner = owner;
-        this.setOwner(owner);
-        this.initialPos = new Vec3d(owner.getX(),owner.getY(),owner.getZ());
+    @Override
+    public void initDataTracker() {
     }
 
     @Override
@@ -65,12 +49,6 @@ public class BulletEntity extends PersistentProjectileEntity implements IAnimata
         this.setVelocity(current.x, current.y - caliber.verticalDrag(this.getBlockPos(),initialPos), current.z);
 
         this.caliber.tick(this);
-
-        /*if (this.world.isClient) {
-            double d2 = this.getX() + (this.random.nextDouble()) * (double) this.getWidth() * 0.5D;
-            double f2 = this.getZ() + (this.random.nextDouble()) * (double) this.getWidth() * 0.5D;
-            this.world.addParticle(ParticleTypes.SMOKE, true, d2, this.getY(), f2, 0, 0, 0);
-        }*/
     }
 
     @Override
@@ -105,9 +83,15 @@ public class BulletEntity extends PersistentProjectileEntity implements IAnimata
             this.remove(RemovalReason.DISCARDED);
     }
 
-    public void initEntity(LivingEntity user) {
+    public void initEntity(Identifier caliber, Identifier bulletType,LivingEntity user) {
+        this.caliber = RegistryManager.BULLET_CALIBER_SIMPLE_REGISTRY.get(caliber);
+        this.type = RegistryManager.BULLET_TYPE_SIMPLE_REGISTRY.get(bulletType);
+
+        this.setOwner(user);
+        this.initialPos = new Vec3d(user.getX(),user.getY(),user.getZ());
+
         this.setPos(user.getX(),user.getEyeY(),user.getZ());
-        this.setVelocity(user,user.getPitch(),user.getHeadYaw(),caliber.roll(), caliber.velocity(),caliber.divergence());
+        this.setVelocity(user,user.getPitch(),user.getHeadYaw(),this.caliber.roll(), this.caliber.velocity(),this.caliber.divergence());
     }
 
     @Override
@@ -124,20 +108,6 @@ public class BulletEntity extends PersistentProjectileEntity implements IAnimata
     public void setVelocity(double x,double y, double z,float speed,float divergence) {
         super.setVelocity(x,y,z,speed,divergence);
         this.ticksInAir = 0;
-    }
-
-    @Override
-    protected ItemStack asItemStack() {
-        return new ItemStack(Blocks.RED_CONCRETE);
-    }
-
-    @Override
-    public void initDataTracker() {
-        super.initDataTracker();
-    }
-
-    public double distSquared(double x1, double y1, double x2, double y2) {
-        return (y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1);
     }
 
     @Override

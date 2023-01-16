@@ -5,7 +5,7 @@ import com.google.gson.JsonParser;
 import de.zonlykroks.gunsandglory.common.BulletEntity;
 import de.zonlykroks.gunsandglory.common.IBulletCaliber;
 import de.zonlykroks.gunsandglory.common.IBulletType;
-import de.zonlykroks.gunsandglory.util.RegistryUtils;
+import de.zonlykroks.gunsandglory.util.RegistryManager;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
@@ -14,13 +14,10 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Arrays;
 
 public class GunsAndGloryConfig {
 
@@ -59,7 +56,7 @@ public class GunsAndGloryConfig {
                 }
             };
 
-            Registry.register(RegistryUtils.BULLET_TYPE_REGISTRY,bulletType.id(),bulletType);
+            RegistryManager.registerType(bulletType);
         }
 
         for(File caliberFile : caliberFolder.listFiles()) {
@@ -117,7 +114,7 @@ public class GunsAndGloryConfig {
                 }
             };
 
-            Registry.register(RegistryUtils.BULLET_CALIBER_REGISTRY,caliber.id(),caliber);
+            RegistryManager.registerCaliber(caliber);
         }
     }
 
